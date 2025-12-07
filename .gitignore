@@ -1,0 +1,17 @@
+# Ignore .env folder: Gemini API key
+.env
+
+# Ignore uv virtual environment
+.venv/
+
+# Ignore all __pycache__ folders
+__pycache__/
+
+# VSCode settings
+.vscode/
+
+# Ignore notebooks folder (used only to run small pieces of code quickly)
+notebooks/
+
+# Ignore files folder. it contains pdf/word files for testing only
+files/

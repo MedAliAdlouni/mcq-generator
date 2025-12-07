@@ -1,7 +1,12 @@
 [project]
 name = "mcq-generator"
 version = "0.1.0"
-description = "Add your description here"
+description = "Multiple Choice Questions generator"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "google>=3.0.0",
+    "openai",
+    "pytest>=9.0.2",
+    "reportlab>=4.4.5",
+]
