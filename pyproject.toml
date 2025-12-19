@@ -8,5 +8,6 @@ dependencies = [
     "google>=3.0.0",
     "openai",
     "pytest>=9.0.2",
+    "python-dotenv>=1.2.1",
     "reportlab>=4.4.5",
 ]
