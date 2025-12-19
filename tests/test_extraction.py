@@ -58,12 +58,8 @@ def test_empty_file(empty_file):
 # Parametrized test for real files
 # ------------------------------------------------
 TEST_FILES_DIR = Path(__file__).parent.parent / "files"
-print(f"\n=== Looking for files in: {TEST_FILES_DIR.absolute()} ===")
-print(f"=== Directory exists: {TEST_FILES_DIR.exists()} ===")
 files = list(TEST_FILES_DIR.glob("*"))
-print(f"=== Files found: {files} ===\n")
 
-# @pytest.mark.skipif(len(files) == 0, reason = "No files found in the directory")
 @pytest.mark.parametrize("file_path", files)
 def test_real_files(file_path):
     markdown = extract_text_from_file(str(file_path))

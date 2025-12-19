@@ -1,6 +1,6 @@
 import os
 import json
-from google import genai
+import google.genai as genai
 from google.genai import types
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
@@ -37,7 +37,7 @@ Tu es un générateur de quiz pédagogique expert. Ta mission est de créer un e
 
 TEXTE À ANALYSER :
 <<<
-{texte}
+{text}
 <<<
 """
 class MCQ(BaseModel):
@@ -74,21 +74,22 @@ def generate_mcq(text: str, nb_questions=10) -> List:
 
     response = client.models.generate_content(
         model=MODEL_NAME,
-        contents=prompt;
-        generation_config = types.GenerationConfig(
-            response_mime_type="application/json",
-            response_schema=MCQList
-        )
+        contents=prompt,
+        config = {
+            "response_mime_type": "application/json",
+            "response_schema": MCQList
+        }
     )
+    
 
     try:
         quiz = MCQList.model_validate_json(response.text)
         return [item.model_dump() for item in quiz.questions]
     
     except Exception as e:
-        print("JSON parsing error:", e)
-        print(response.text[:200])
-        return []
+            print("JSON parsing error:", e)
+            print(response.text[:200])
+            return []
 
 
 
