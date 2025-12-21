@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Backend API URL
-API_URL = "http://127.0.0.1:5000"
+API_URL = "https://eudaemonistic-nonmutationally-kathleen.ngrok-free.dev"
 
 st.title("📝 MCQ Generator")
 st.write("Generate multiple choice questions from text or uploaded documents")
