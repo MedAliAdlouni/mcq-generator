@@ -1,7 +1,7 @@
 from markitdown import MarkItDown
+from typing import BinaryIO
 
-
-def extract_text_from_file(path: str) -> str:
+def extract_text_from_file(stream: BinaryIO) -> str:
     """Extract text from word/pdf file and converts it in markdown format.
     Returns a string format. 
 
@@ -11,6 +11,7 @@ def extract_text_from_file(path: str) -> str:
     Returns:
         str: markdown consisting of the text extracted from the file
     """
+    stream.seek(0)
     md = MarkItDown()
-    result = md.convert(path)
+    result = md.convert(stream)
     return result.text_content.strip()
