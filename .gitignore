@@ -15,3 +15,7 @@ notebooks/
 
 # Ignore files folder. it contains pdf/word files for testing only
 files/
+uploads/
+
+# sqlite database
+data.db

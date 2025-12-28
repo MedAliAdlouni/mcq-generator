@@ -6,14 +6,18 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "flask>=3.1.2",
+    "flask-login>=0.6.3",
     "google>=3.0.0",
     "google-genai>=1.56.0",
+    "gunicorn>=23.0.0",
     "markitdown[all]>=0.1.4",
     "openai",
+    "psycopg2-binary>=2.9.11",
     "pytest>=9.0.2",
     "python-docx>=1.2.0",
     "python-dotenv>=1.2.1",
     "reportlab>=4.4.5",
+    "sqlalchemy>=2.0.45",
     "streamlit>=1.52.2",
     "werkzeug>=3.1.4",
 ]
