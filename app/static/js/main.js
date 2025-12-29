@@ -1,6 +1,6 @@
 // app/static/js/main.js
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("✨ Révis'IA front prêt !");
+  console.log("✨ qcmed front prêt !");
 
   // --- Upload ---
   const uploadForm = document.getElementById("uploadForm");
