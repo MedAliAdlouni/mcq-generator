@@ -26,7 +26,7 @@ def generate_quiz():
             return jsonify({"error": "Already generated MCQs for this document."}), 409
 
         # call with correct kwarg name
-        questions = generate_mcq(document.content, nb_questions=30)
+        questions = generate_mcq(document.content, nb_questions=10)
         if not questions:
             return jsonify({"error": "No question has been generated"}), 500
 
