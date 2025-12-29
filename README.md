@@ -1,87 +1,282 @@
+# MCQ Generator
 
+An intelligent web application that transforms your documents into interactive multiple-choice quizzes using AI-powered question generation.
+
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://mcq-generator-production-a0dc.up.railway.app/)
+
+## Overview
+
+MCQ Generator extracts meaningful content from PDF and DOCX documents and automatically generates high-quality multiple-choice questions. Built with Flask, PostgreSQL, and integrated LLM capabilities, it provides a complete quiz creation and management platform.
+
+### Key Features
+
+- 📄 Document upload and text extraction (PDF, DOCX)
+- 🤖 AI-powered MCQ generation with configurable difficulty
+- 👤 User authentication and session management
+- 📊 Quiz tracking with detailed scoring and review
+- 🎯 Question validation and quality control
+- 🐳 Containerized deployment with Docker
+
+## Tech Stack
+
+- **Backend:** Flask with Blueprint architecture
+- **Database:** PostgreSQL with SQLAlchemy ORM
+- **Frontend:** Jinja2 templates with Tailwind CSS
+- **AI/ML:** LLM integration for question generation
+- **Deployment:** Docker + Railway
+- **Testing:** pytest
+
+## Quick Start
+
+### Prerequisites
+
+- Python 3.9+
+- PostgreSQL 12+
+- pip and virtualenv
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd mcq-generator
+   ```
+
+2. **Set up virtual environment**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # Windows: .venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure environment variables**
+   ```bash
+   export FLASK_ENV=development
+   export DATABASE_URL=postgresql://user:pass@localhost:5432/mcq_db
+   export SECRET_KEY="your-secret-key-here"
+   # Add any LLM API keys if needed
+   ```
+
+5. **Initialize database**
+   ```bash
+   flask db upgrade
+   ```
+
+6. **Run the application**
+   ```bash
+   python run.py
+   # or with gunicorn
+   gunicorn wsgi:app
+   ```
+
+Visit `http://localhost:5000` to access the application.
+
+## Project Structure
 
 ```
-📦mcq-generator
- ┣ 📂app
- ┃ ┣ 📂routes
- ┃ ┣ 📄api.py
- ┃ ┗ 📄__init__.py
- ┣ 📂core
- ┃ ┣ 📄extraction.py
- ┃ ┣ 📄llm.py
- ┃ ┗ 📄__init__.py
- ┣ 📂files
- ┃ ┣ 📄cv.pdf
- ┃ ┣ 📄LetterOfRecommandation_lingJin.pdf
- ┃ ┗ 📄ssondo_preprint.docx
- ┣ 📂notebooks
- ┃ ┗ 📄testing.ipynb
- ┣ 📂tests
- ┃ ┣ 📄conftest.py
- ┃ ┣ 📄test_extraction.py
- ┃ ┗ 📄test_llm.py
- ┣ 📄.gitignore
- ┣ 📄.python-version
- ┣ 📄main.py
- ┣ 📄pyproject.toml
- ┣ 📄README.md
- ┗ 📄uv.lock
+mcq-generator/
+├── app/                      # Main application package
+│   ├── __init__.py          # App factory and config
+│   ├── backend.py           # Backend entry points
+│   ├── db.py                # Database configuration
+│   ├── models.py            # SQLAlchemy ORM models
+│   ├── core/                # Business logic
+│   │   ├── extraction.py    # Document parsing and chunking
+│   │   └── llm.py          # LLM integration and MCQ generation
+│   ├── routes/              # Flask blueprints
+│   │   ├── auth.py         # Authentication routes
+│   │   ├── documents.py    # Document management
+│   │   ├── quizzes.py      # Quiz generation and play
+│   │   ├── results.py      # Results and scoring
+│   │   └── ui.py           # UI-specific routes
+│   ├── templates/           # Jinja2 HTML templates
+│   └── static/             # CSS, JS, images
+├── tests/                   # Test suite
+├── files/                   # Example documents
+├── uploads/                 # User-uploaded files (runtime)
+├── Dockerfile              # Container configuration
+├── docker-compose.yml      # Multi-container orchestration
+├── requirements.txt        # Python dependencies
+└── run.py                  # Application entry point
 ```
 
+## How It Works
 
+### 1. Document Processing
 
+Users upload documents through the web interface. The extraction module (`core/extraction.py`) processes the file:
+- Extracts text from PDF and DOCX formats
+- Cleans and normalizes the content
+- Splits text into semantic chunks optimized for question generation
 
-```mermaid
-erDiagram
-    USER ||--o{ DOCUMENT : owns
-    USER ||--o{ QUIZSESSION : takes
-    DOCUMENT ||--o{ QUESTION : contains
-    DOCUMENT ||--o{ QUIZSESSION : "used in"
-    QUESTION ||--o{ RESULT : has
-    QUIZSESSION ||--o{ RESULT : includes
+### 2. Question Generation
 
-    USER {
-        string id PK
-        string username
-        string email
-        string password_hash
-        datetime created_at
-    }
+The LLM module (`core/llm.py`) generates MCQs from extracted content:
+- Formats prompts for the language model
+- Generates questions with multiple distractors
+- Validates and normalizes question quality
+- Stores approved questions in the database
 
-    DOCUMENT {
-        string id PK
-        string title
-        string content
-        datetime created_at
-        string user_id FK
-    }
+### 3. Quiz Management
 
-    QUESTION {
-        string id PK
-        string type
-        string question
-        json choices
-        string answer
-        string document_id FK
-    }
+The quiz lifecycle is managed through several components:
+- **QuizSession:** Links questions to users and documents
+- **Question Selection:** Intelligently selects questions based on difficulty
+- **Answer Collection:** Tracks user responses in real-time
+- **Scoring:** Calculates results and provides detailed feedback
 
-    RESULT {
-        string id PK
-        string user_answer
-        boolean is_correct
-        string evaluation
-        datetime reviewed_at
-        string question_id FK
-        string user_id FK
-        string quiz_session_id FK
-    }
+### 4. Results & Analytics
 
-    QUIZSESSION {
-        string id PK
-        float score
-        int total_questions
-        datetime played_at
-        string user_id FK
-        string document_id FK
-    }
+Users can review their quiz performance:
+- View correct and incorrect answers
+- See explanations for each question
+- Track progress over time
+- Compare results across multiple attempts
+
+## Docker Deployment
+
+### Build and Run Locally
+
+```bash
+# Build the image
+docker build -t mcq-generator .
+
+# Run with environment variables
+docker run -e DATABASE_URL="$DATABASE_URL" \
+           -e SECRET_KEY="$SECRET_KEY" \
+           -p 8000:8000 \
+           mcq-generator
 ```
+
+### Using Docker Compose
+
+```bash
+# Start all services (app + PostgreSQL)
+docker-compose up -d
+
+# Stop services
+docker-compose down
+```
+
+The `docker-compose.yml` file includes both the Flask app and PostgreSQL database with automatic networking.
+
+## Deployment on Railway
+
+This application is deployed on [Railway](https://railway.app/) with managed PostgreSQL.
+
+### Deploy Your Own
+
+1. Fork this repository
+2. Create a new project on Railway
+3. Connect your GitHub repository
+4. Add a PostgreSQL plugin
+5. Set environment variables:
+   - `SECRET_KEY`
+   - `DATABASE_URL` (auto-provided by Railway)
+   - Any required LLM API keys
+6. Configure build command: `pip install -r requirements.txt`
+7. Configure start command: `gunicorn wsgi:app`
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `DATABASE_URL` | PostgreSQL connection string | Yes |
+| `SECRET_KEY` | Flask session secret | Yes |
+| `FLASK_ENV` | Environment mode (development/production) | No |
+| `LLM_API_KEY` | API key for LLM provider | Conditional |
+
+### Customization
+
+- **Question prompts:** Modify templates in `app/core/llm.py`
+- **Chunking strategy:** Adjust parameters in `app/core/extraction.py`
+- **Styling:** Edit Tailwind classes in templates or customize `static/css/`
+
+## Testing
+
+Run the test suite with pytest:
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=app
+
+# Run specific test file
+pytest tests/test_extraction.py
+```
+
+Tests cover:
+- Document extraction and parsing
+- LLM integration and question generation
+- Database models and queries
+- Route handlers and views
+
+## Troubleshooting
+
+### Common Issues
+
+**Low-quality questions generated:**
+- Adjust prompt templates in `app/core/llm.py`
+- Fine-tune chunking parameters in `app/core/extraction.py`
+- Ensure input documents have clear, well-structured content
+
+**Database connection errors:**
+- Verify `DATABASE_URL` format: `postgresql://user:pass@host:port/dbname`
+- In Docker, use service names from `docker-compose.yml`
+- Check PostgreSQL is running and accessible
+
+**File upload failures:**
+- Ensure `uploads/` directory exists and has write permissions
+- Check file size limits in Flask config
+- Verify supported file formats (PDF, DOCX)
+
+## Contributing
+
+Contributions are welcome! Here are areas where you can help:
+
+- **Extraction improvements:** Better heuristics for document parsing
+- **Question validation:** Enhanced quality control for generated MCQs
+- **UI/UX enhancements:** Frontend improvements and interactivity
+- **Test coverage:** Additional test cases and edge case handling
+- **Documentation:** API docs, guides, and examples
+
+### Development Workflow
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes and add tests
+4. Run the test suite (`pytest`)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+## Roadmap
+
+- [ ] Support for additional document formats (TXT, MD, HTML)
+- [ ] Tailwind build pipeline with PostCSS
+- [ ] GitHub Actions CI/CD
+- [ ] Export quizzes to various formats
+- [ ] Multi-language support
+- [ ] Advanced analytics dashboard
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgements
+
+Built as a demonstration of document processing, LLM integration, and modern web application architecture.
+
+---
+
+**Live Demo:** [https://mcq-generator-production-a0dc.up.railway.app/](https://mcq-generator-production-a0dc.up.railway.app/)
+
+**Issues?** Open an issue on GitHub or reach out via the repository.
