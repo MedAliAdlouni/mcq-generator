@@ -19,3 +19,5 @@ uploads/
 
 # sqlite database
 data.db
+
+docker-compose.yml
