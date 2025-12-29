@@ -28,7 +28,7 @@ RUN uv sync --frozen --no-dev
 COPY . .
 
 # Expose port
-EXPOSE 5000 5432
+EXPOSE 5000
 
 # Run via uv (automatically uses .venv)
 CMD ["uv", "run", "gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "wsgi:app"]
