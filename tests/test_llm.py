@@ -1,5 +1,5 @@
 import pytest 
-from core.llm import generate_mcq
+from app.core.llm import generate_mcq
 
 TEXT = """ 
 Bees play a crucial role in pollination, which is essential for the reproduction of many plants. 
