@@ -1,8 +1,6 @@
 import os
-import json
 import google.genai as genai
-from google.genai import types
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from dotenv import load_dotenv
 from typing import List
 
@@ -83,12 +81,16 @@ def generate_mcq(text: str, nb_questions=10) -> List:
     
 
     try:
+        if response.text is None:
+            print("Error: Response text is None")
+            return []
         quiz = MCQList.model_validate_json(response.text)
         return [item.model_dump() for item in quiz.questions]
     
     except Exception as e:
             print("JSON parsing error:", e)
-            print(response.text[:200])
+            if response.text is not None:
+                print(response.text[:200])
             return []
 
 

@@ -1,6 +1,6 @@
 import uuid
 from flask import Blueprint, request, jsonify
-from flask_login import login_required
+from flask_login import login_required, current_user  # type: ignore[import-untyped]
 
 from ..db import LocalSession
 from ..models import Result, QuizSession

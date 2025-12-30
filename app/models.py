@@ -1,7 +1,8 @@
 import uuid
 import enum
 
-from sqlalchemy import Column, Text, Boolean, DateTime, ForeignKey, Enum, JSON, Float, Integer
+from sqlalchemy import Column, Text, Boolean, DateTime as DateTimeType, ForeignKey, Enum, JSON, Float, Integer
+from datetime import datetime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -24,10 +25,10 @@ class User(Base, UserMixin):
     id: Mapped[str] = mapped_column(Text, primary_key=True, default=lambda: str(uuid.uuid4()))
 
     # Other keys
-    username = Column(Text, unique=True, nullable=False)
-    email = Column(Text, unique=True, nullable=False)
-    password_hash = Column(Text, nullable=False)
-    created_at = Column(DateTime, server_default=func.now())
+    username: Mapped[str] = mapped_column(Text, unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(Text, unique=True, nullable=False)
+    password_hash: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTimeType, server_default=func.now())
 
     # Relationships
     documents = relationship("Document", back_populates="user", cascade="all, delete-orphan")
@@ -50,7 +51,7 @@ class Document(Base):
     # Other keys
     title = Column(Text, nullable=False)
     content = Column(Text, nullable=False)
-    created_at = Column(DateTime, server_default=func.now())
+    created_at = Column(DateTimeType, server_default=func.now())
 
     # Foreign Keys
     user_id = Column(Text, ForeignKey("users.id"), nullable=True)
@@ -68,8 +69,8 @@ class Question(Base):
     id: Mapped[str] = mapped_column(Text, primary_key=True, default= lambda: str(uuid.uuid4()))
 
     # Other keys
-    type = Column(Enum(QuestionType), nullable=False)
-    question = Column(Text, nullable=False)
+    type: Mapped[QuestionType] = mapped_column(Enum(QuestionType), nullable=False)
+    question: Mapped[str] = mapped_column(Text, nullable=False)
     choices = Column(JSON, nullable=True)
     answer = Column(Text, nullable=True)
 
@@ -92,7 +93,7 @@ class Result(Base):
     user_answer = Column(Text, nullable=False)
     is_correct = Column(Boolean, nullable=True)
     evaluation = Column(Text, nullable=True)
-    reviewed_at = Column(DateTime, server_default=func.now())
+    reviewed_at = Column(DateTimeType, server_default=func.now())
 
     # Foreign Keys
     question_id = Column(Text, ForeignKey("questions.id"), nullable=False)
@@ -114,7 +115,7 @@ class QuizSession(Base):
     # Other keys
     score = Column(Float, nullable=False)
     total_questions = Column(Integer, nullable=False)
-    played_at = Column(DateTime, server_default=func.now())
+    played_at = Column(DateTimeType, server_default=func.now())
 
     # Foreign Keys
     user_id = Column(Text, ForeignKey("users.id"), nullable=True)

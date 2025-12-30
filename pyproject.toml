@@ -11,12 +11,14 @@ dependencies = [
     "google-genai>=1.56.0",
     "gunicorn>=23.0.0",
     "markitdown[all]>=0.1.4",
+    "mypy>=1.19.1",
     "openai",
     "psycopg2-binary>=2.9.11",
     "pytest>=9.0.2",
     "python-docx>=1.2.0",
     "python-dotenv>=1.2.1",
     "reportlab>=4.4.5",
+    "ruff>=0.14.10",
     "sqlalchemy>=2.0.45",
     "streamlit>=1.52.2",
     "unicorn>=2.1.4",
@@ -27,3 +29,17 @@ dependencies = [
 markers = [
     "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
 ]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "flask_login.*",
+    "reportlab.*",
+]
+ignore_missing_imports = true

@@ -65,14 +65,14 @@ def delete_document(document_id):
     try:
         document = session.get(Document, document_id)
         if not document:
-            return jsonify({"error": f"Not found"}), 404
+            return jsonify({"error": "Not found"}), 404
         if current_user.id != document.user_id:
             return jsonify({"error": "Not authorized"}), 403
         
         session.delete(document)
         session.commit()
         
-        return jsonify({"message": f"Document deleted from database"}), 200
+        return jsonify({"message": "Document deleted from database"}), 200
 
     except Exception as e:
         session.rollback()
