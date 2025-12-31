@@ -1,4 +1,4 @@
-# MCQ Generator
+# MCQ Generator App
 
 An intelligent web application that transforms your documents into interactive multiple-choice quizzes using AI-powered question generation.
 

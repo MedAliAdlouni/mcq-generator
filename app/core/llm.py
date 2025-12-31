@@ -1,7 +1,6 @@
 import os
 import google.genai as genai
 from pydantic import BaseModel
-from dotenv import load_dotenv
 from typing import List
 
 
