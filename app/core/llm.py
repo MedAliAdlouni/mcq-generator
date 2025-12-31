@@ -4,8 +4,6 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from typing import List
 
-# Load environement variables
-load_dotenv()
 
 # Instantiate Gemini client
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
@@ -81,16 +79,12 @@ def generate_mcq(text: str, nb_questions=10) -> List:
     
 
     try:
-        if response.text is None:
-            print("Error: Response text is None")
-            return []
         quiz = MCQList.model_validate_json(response.text)
         return [item.model_dump() for item in quiz.questions]
     
     except Exception as e:
             print("JSON parsing error:", e)
-            if response.text is not None:
-                print(response.text[:200])
+            print(response.text[:200])
             return []
 
 

@@ -6,6 +6,9 @@ from .db import init_db
 from .routes import documents, quizzes, results, ui, auth
 from .routes.auth import login_manager
 
+import os
+print("SECRET_KEY in env?", "SECRET_KEY" in os.environ)
+print("DATABASE_URL:", os.getenv("DATABASE_URL"))
 
 def create_app():
     app = Flask(__name__)
