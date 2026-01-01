@@ -1,7 +1,7 @@
 import os
 import google.genai as genai
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 
 # Instantiate Gemini client
@@ -75,17 +75,20 @@ def generate_mcq(text: str, nb_questions=10) -> List:
             "response_schema": MCQList
         }
     )
-    
+
+    resp_text = response.text
+    if resp_text is None:
+        print("No text returned from Gemini")
+        return []
 
     try:
-        quiz = MCQList.model_validate_json(response.text)
+        quiz = MCQList.model_validate_json(resp_text)
         return [item.model_dump() for item in quiz.questions]
-    
-    except Exception as e:
-            print("JSON parsing error:", e)
-            print(response.text[:200])
-            return []
 
+    except Exception as e:
+        print("JSON parsing error:", e)
+        print(resp_text[:200])
+        return []
 
 
 
