@@ -1,7 +1,7 @@
 import os
 import google.genai as genai
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 
 
 # Instantiate Gemini client
