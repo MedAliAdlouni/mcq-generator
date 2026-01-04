@@ -96,6 +96,8 @@ jobs:
   # ------------------------
   # Coverage badge generation
   # ------------------------
+  
+    
   coverage-badge:
     runs-on: ubuntu-latest
     needs: tests
