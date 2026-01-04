@@ -89,7 +89,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push Docker image
-        run: docker push adlouni/mcq-generator:latest
+        run: docker push mcq-generator:latest
 
   # ------------------------
   # Coverage badge generation

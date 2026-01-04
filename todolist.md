@@ -2,7 +2,6 @@
 - understand the additional unit and integration tests
 - reread the backend and understand it.
 - reread the frontend and understand it.
-- update the readme
 
 
 
