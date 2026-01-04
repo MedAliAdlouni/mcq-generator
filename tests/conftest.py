@@ -1,14 +1,9 @@
-import sys
-from pathlib import Path
 from unittest.mock import patch
 import pytest
 
 from app import create_app
 from app.db import Base, LocalSession
 from app.models import User, Document, Question, QuestionType
-
-ROOT_DIR = Path(__file__).resolve().parent.parent
-sys.path.append(str(ROOT_DIR))
 
 # ------------------------------------------------
 # Test Configuration

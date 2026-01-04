@@ -25,6 +25,7 @@ COPY pyproject.toml uv.lock ./
 
 # Install dependencies exactly as locked
 RUN uv sync --frozen --no-dev
+RUN uv pip install -e .
 
 ENV PATH="/app/.venv/bin:$PATH"
 

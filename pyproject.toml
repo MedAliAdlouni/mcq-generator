@@ -30,6 +30,11 @@ markers = [
     "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
 ]
 
+[tool.setuptools.packages.find]
+# Only include the `app` package
+include = ["app"]
+
+
 [tool.mypy]
 python_version = "3.11"
 warn_return_any = true
