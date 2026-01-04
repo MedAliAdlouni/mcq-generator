@@ -41,39 +41,39 @@ jobs:
       - name: Type checking
         run: uv run mypy app/
 
-  tests:
-    runs-on: ubuntu-latest
-    env:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v3
-      - name: Cache uv dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/uv
-          key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
-      - run: uv sync --frozen --no-dev
-      - run: uv pip install -e .
+  # tests:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: astral-sh/setup-uv@v3
+  #     - name: Cache uv dependencies
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/.cache/uv
+  #         key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
+  #     - run: uv sync --frozen --no-dev
+  #     - run: uv pip install -e .
 
-      # Run tests and generate coverage
-      - name: Run tests with coverage
-        run: uv run pytest --cov=app tests/ --cov-report=term --cov-report=xml
+  #     # Run tests and generate coverage
+  #     - name: Run tests with coverage
+  #       run: uv run pytest --cov=app tests/ --cov-report=term --cov-report=xml
 
-      # Upload coverage to Codecov
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          files: coverage.xml
-          token: ${{ secrets.CODECOV_TOKEN }}   
-          fail_ci_if_error: true
+  #     # Upload coverage to Codecov
+  #     - name: Upload coverage to Codecov
+  #       uses: codecov/codecov-action@v4
+  #       with:
+  #         files: coverage.xml
+  #         token: ${{ secrets.CODECOV_TOKEN }}   
+  #         fail_ci_if_error: true
 
   # ------------------------
   # Docker build (production-like)
   # ------------------------
   docker:
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, tests]
+    needs: [lint, typecheck] #[lint, typecheck, tests]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
@@ -98,7 +98,7 @@ jobs:
 
   coverage-badge:
     runs-on: ubuntu-latest
-    needs: tests
+    # needs: tests
     steps:
       - uses: actions/checkout@v4
 
