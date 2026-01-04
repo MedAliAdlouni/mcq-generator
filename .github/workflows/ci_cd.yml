@@ -80,7 +80,7 @@ jobs:
 
       # Build Docker image
       - name: Build Docker image
-        run: docker build --progress=plain -t mcq-generator:latest .
+        run: docker build --progress=plain -t adlouni/mcq-generator:latest .
 
       # Optional: push image to registry
       - name: Log in to Docker Hub
@@ -89,7 +89,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push Docker image
-        run: docker push mcq-generator:latest
+        run: docker push adlouni/mcq-generator:latest
 
   # ------------------------
   # Coverage badge generation
