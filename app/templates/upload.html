@@ -1,18 +1,18 @@
 {% extends "base.html" %}
-{% block title %}Importer un document{% endblock %}
+{% block title %}Upload a Document{% endblock %}
 {% block content %}
 
 <div class="max-w-lg mx-auto bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100 p-8 text-center animate-fade-in">
-  <!-- Titre principal -->
+  <!-- Main title -->
   <h1 class="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
-    Importer un document
+    Upload a Document
   </h1>
 
-  <!-- Formulaire d'import -->
+  <!-- Upload form -->
   <form id="uploadForm" class="space-y-5">
     <div class="text-left">
       <label class="block text-sm font-medium text-gray-700 mb-2">
-        Sélectionne ton fichier (.docx)
+        Select your file (.docx)
       </label>
       <input type="file" name="file" accept=".docx" required
              class="w-full border border-gray-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition">
@@ -20,19 +20,19 @@
 
     <button type="submit"
             class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-2.5 rounded-lg shadow hover:opacity-90 transform hover:-translate-y-0.5 transition">
-      📤 Envoyer le document
+      📤 Submit Document
     </button>
   </form>
 
-  <!-- Message de statut -->
+  <!-- Status message -->
   <p id="uploadStatus" class="text-sm text-gray-600 mt-4 italic"></p>
 </div>
 
-<!-- Lien retour -->
+<!-- Back link -->
 <div class="text-center mt-8">
   <a href="{{ url_for('ui.show_documents') }}"
      class="inline-block bg-gray-100 text-gray-700 px-5 py-2 rounded-lg shadow-sm hover:bg-gray-200 transition">
-    ← Retour à mes documents
+    ← Back to My Documents
   </a>
 </div>
 

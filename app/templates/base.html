@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}qcmed{% endblock %} | qcmed</title>
-  <!-- Icône de l’onglet -->
+  <!-- Tab icon -->
   <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}?v=3">
   <meta name="theme-color" content="#2563eb">
@@ -29,7 +29,7 @@
     }
   </script>
 
-  <!-- Styles personnalisés -->
+  <!-- Custom styles -->
   <style>
     .btn {
       display: inline-block;
@@ -41,32 +41,16 @@
       text-align: center;
       transition: all 0.2s ease-in-out;
     }
-    .btn-green {
-      background-color: #bbf7d0; color: #14532d;
-    }
-    .btn-green:hover {
-      background-color: #86efac;
-    }
-    .btn-yellow {
-      background-color: #fef3c7; color: #78350f;
-    }
-    .btn-yellow:hover {
-      background-color: #fde68a;
-    }
-    .btn-red {
-      background-color: #fecaca; color: #7f1d1d;
-    }
-    .btn-red:hover {
-      background-color: #fca5a5;
-    }
-    .btn-gray {
-      background-color: #e5e7eb; color: #374151;
-    }
-    .btn-gray:hover {
-      background-color: #d1d5db;
-    }
+    .btn-green { background-color: #bbf7d0; color: #14532d; }
+    .btn-green:hover { background-color: #86efac; }
+    .btn-yellow { background-color: #fef3c7; color: #78350f; }
+    .btn-yellow:hover { background-color: #fde68a; }
+    .btn-red { background-color: #fecaca; color: #7f1d1d; }
+    .btn-red:hover { background-color: #fca5a5; }
+    .btn-gray { background-color: #e5e7eb; color: #374151; }
+    .btn-gray:hover { background-color: #d1d5db; }
 
-    /* Navigation améliorée */
+    /* Improved navigation */
     .nav-link {
       position: relative;
       transition: color 0.2s ease-in-out;
@@ -81,9 +65,8 @@
       background-color: #2563eb;
       transition: width 0.25s ease-in-out;
     }
-    .nav-link:hover::after {
-      width: 100%;
-    }
+    .nav-link:hover::after { width: 100%; }
+
     .logo-glow::before {
       content: "";
       position: absolute;
@@ -93,10 +76,8 @@
       opacity: 0.25;
       filter: blur(8px);
       transition: opacity 0.3s ease-in-out;
-  }
-  .logo-glow:hover::before {
-    opacity: 0.45;
-  }
+    }
+    .logo-glow:hover::before { opacity: 0.45; }
   </style>
 </head>
 
@@ -106,50 +87,49 @@
   <header class="bg-white/90 backdrop-blur-md shadow-sm fixed w-full top-0 z-10 border-b border-gray-100">
     <nav class="container mx-auto flex justify-between items-center px-6 py-3">
       <a href="/" class="flex items-center gap-3 hover:opacity-90 transition">
-        <!-- Conteneur du logo -->
+
+        <!-- Logo container -->
         <div class="relative flex items-center justify-center h-10 w-10 rounded-xl bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-500 shadow-md logo-glow">
-          <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="logo qcmed" class="h-6 w-6 relative z-10">
+          <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="qcmed logo" class="h-6 w-6 relative z-10">
         </div>
 
-        <!-- Texte du logo -->
+        <!-- Logo text -->
         <span class="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500">
-          Révis’<span class="text-indigo-600">IA</span>
+          Revis’<span class="text-indigo-600">AI</span>
         </span>
       </a>
 
-      <!-- Liens de navigation -->
+      <!-- Navigation links -->
       <div class="flex items-center space-x-6 text-sm font-medium">
         <a href="{{ url_for('ui.show_documents') }}"
           class="px-5 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow hover:opacity-90 transform hover:-translate-y-0.5 transition">
-          Cours
+          Courses
         </a>
 
         <a href="{{ url_for('ui.show_results') }}"
           class="px-5 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-blue-600 text-white shadow hover:opacity-90 transform hover:-translate-y-0.5 transition">
-          Résultats
+          Results
         </a>
-
-
 
         {% if current_user.is_authenticated %}
           <span class="text-gray-600">👋 {{ current_user.username }}</span>
 
           <a href="{{ url_for('auth.logout') }}"
             class="inline-block bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-5 py-2 rounded-lg shadow hover:opacity-90 transition transform hover:-translate-y-0.5">
-            Déconnexion
+            Logout
           </a>
         {% else %}
           <a href="{{ url_for('auth.login') }}"
             class="border border-blue-500 text-blue-600 px-5 py-2 rounded-lg shadow-sm hover:bg-blue-50 transition transform hover:-translate-y-0.5">
-            🔑 Connexion
+            🔑 Login
           </a>
+
           <a href="{{ url_for('auth.register') }}"
             class="inline-block bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-5 py-2 rounded-lg shadow hover:opacity-90 transition transform hover:-translate-y-0.5">
-            ✍️ Inscription
+            ✍️ Register
           </a>
         {% endif %}
       </div>
-
     </nav>
   </header>
 
@@ -188,7 +168,6 @@
     animation: footerScroll 25s linear infinite;
   }
   </style>
-
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>

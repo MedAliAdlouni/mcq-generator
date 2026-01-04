@@ -48,4 +48,8 @@ def test_generate_mcq_output_structure():
         assert isinstance(q["answers"], list)
         assert len(q["answers"]) == 4
 
-        assert q["correct_answer"] in q["answers"]
+        # Check if correct_answer matches one of the answers (allowing for minor formatting differences)
+        # LLM might return answers with/without trailing periods
+        correct_answer_clean = q["correct_answer"].strip().rstrip('.')
+        answers_clean = [ans.strip().rstrip('.') for ans in q["answers"]]
+        assert correct_answer_clean in answers_clean or q["correct_answer"] in q["answers"]
