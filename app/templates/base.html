@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}qcmed{% endblock %} | qcmed</title>
+  <title>{% block title %}QuizAI{% endblock %} | QuizAI</title>
   <!-- Tab icon -->
   <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}?v=3">
-  <meta name="theme-color" content="#2563eb">
+  <meta name="theme-color" content="#6366f1">
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,13 +16,32 @@
       theme: {
         extend: {
           colors: {
-            primary: '#2563eb',
-            accent: '#facc15',
-            softgray: '#f9fafb',
-            pastelgreen: '#bbf7d0',
+            primary: '#6366f1',
+            accent: '#f59e0b',
+            softgray: '#f8fafc',
+            pastelgreen: '#d1fae5',
             pastelyellow: '#fef3c7',
-            pastelred: '#fecaca',
-            pastelblue: '#bfdbfe',
+            pastelred: '#fee2e2',
+            pastelblue: '#dbeafe',
+          },
+          animation: {
+            'gradient': 'gradient 8s linear infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'glow': 'glow 2s ease-in-out infinite alternate',
+          },
+          keyframes: {
+            gradient: {
+              '0%, 100%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            glow: {
+              '0%': { boxShadow: '0 0 20px rgba(99, 102, 241, 0.3)' },
+              '100%': { boxShadow: '0 0 30px rgba(99, 102, 241, 0.6)' },
+            }
           }
         }
       }
@@ -31,101 +50,357 @@
 
   <!-- Custom styles -->
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
     .btn {
       display: inline-block;
       font-size: 0.875rem;
-      font-weight: 500;
-      padding: 0.5rem 1rem;
-      border-radius: 0.6rem;
-      width: 100px;
+      font-weight: 600;
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.75rem;
+      min-width: 110px;
       text-align: center;
-      transition: all 0.2s ease-in-out;
-    }
-    .btn-green { background-color: #bbf7d0; color: #14532d; }
-    .btn-green:hover { background-color: #86efac; }
-    .btn-yellow { background-color: #fef3c7; color: #78350f; }
-    .btn-yellow:hover { background-color: #fde68a; }
-    .btn-red { background-color: #fecaca; color: #7f1d1d; }
-    .btn-red:hover { background-color: #fca5a5; }
-    .btn-gray { background-color: #e5e7eb; color: #374151; }
-    .btn-gray:hover { background-color: #d1d5db; }
-
-    /* Improved navigation */
-    .nav-link {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
-      transition: color 0.2s ease-in-out;
+      overflow: hidden;
     }
-    .nav-link::after {
+    
+    .btn::before {
       content: "";
       position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0%;
-      height: 2px;
-      background-color: #2563eb;
-      transition: width 0.25s ease-in-out;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
     }
-    .nav-link:hover::after { width: 100%; }
+    
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
 
-    .logo-glow::before {
+    .btn-green { 
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+    .btn-green:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+    
+    .btn-yellow { 
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    }
+    .btn-yellow:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    }
+    
+    .btn-red { 
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    }
+    .btn-red:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+    
+    .btn-gray { 
+      background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+    }
+    .btn-gray:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+    }
+
+    .nav-link {
+      position: relative;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .nav-link::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      transform: translateX(-50%);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      background: rgba(99, 102, 241, 0.1);
+    }
+    
+    .nav-link:hover::before {
+      width: 80%;
+    }
+
+    .logo-container {
+      position: relative;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .logo-orb {
+      position: relative;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: 
+        0 8px 32px rgba(99, 102, 241, 0.4),
+        inset 0 -2px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .logo-orb::before {
       content: "";
       position: absolute;
       inset: -2px;
       border-radius: 1rem;
-      background: linear-gradient(135deg, #3b82f6, #6366f1, #93c5fd);
-      opacity: 0.25;
-      filter: blur(8px);
-      transition: opacity 0.3s ease-in-out;
+      background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc);
+      opacity: 0;
+      filter: blur(12px);
+      transition: opacity 0.4s ease;
     }
-    .logo-glow:hover::before { opacity: 0.45; }
+
+    .logo-container:hover .logo-orb {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 
+        0 12px 48px rgba(99, 102, 241, 0.6),
+        inset 0 -2px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo-container:hover .logo-orb::before {
+      opacity: 0.6;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 0.625rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .primary-btn::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+
+    .primary-btn:hover::after {
+      width: 300px;
+      height: 300px;
+    }
+
+    .secondary-btn {
+      border: 2px solid;
+      border-image: linear-gradient(135deg, #667eea, #764ba2) 1;
+      background: white;
+      color: #667eea;
+      padding: 0.575rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .secondary-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      transition: left 0.4s ease;
+      z-index: -1;
+    }
+
+    .secondary-btn:hover {
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .secondary-btn:hover::before {
+      left: 0;
+    }
+
+    .content-card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 1.5rem;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .content-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.5);
+    }
+
+    .flash-message {
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      animation: slideDown 0.4s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes footerScroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    
+    .animate-footer-scroll {
+      display: inline-block;
+      animation: footerScroll 30s linear infinite;
+    }
+
+    .user-badge {
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      padding: 0.5rem 1rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      color: #374151;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
   </style>
 </head>
 
-<body class="bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-800 flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen">
 
   <!-- Header -->
-  <header class="bg-white/90 backdrop-blur-md shadow-sm fixed w-full top-0 z-10 border-b border-gray-100">
-    <nav class="container mx-auto flex justify-between items-center px-6 py-3">
-      <a href="/" class="flex items-center gap-3 hover:opacity-90 transition">
-
-        <!-- Logo container -->
-        <div class="relative flex items-center justify-center h-10 w-10 rounded-xl bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-500 shadow-md logo-glow">
-          <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="qcmed logo" class="h-6 w-6 relative z-10">
+  <header class="glass-effect shadow-xl fixed w-full top-0 z-50">
+    <nav class="container mx-auto flex justify-between items-center px-6 py-4">
+      <a href="/" class="logo-container flex items-center gap-3 transition">
+        <!-- Logo orb -->
+        <div class="logo-orb flex items-center justify-center h-12 w-12 rounded-xl relative z-10">
+          <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="QuizAI logo" class="h-7 w-7 relative z-10 brightness-0 invert">
         </div>
 
         <!-- Logo text -->
-        <span class="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500">
-          Revis’<span class="text-indigo-600">AI</span>
+        <span class="text-2xl gradient-text">
+          Revis'<span class="font-black">AI</span>
         </span>
       </a>
 
       <!-- Navigation links -->
-      <div class="flex items-center space-x-6 text-sm font-medium">
-        <a href="{{ url_for('ui.show_documents') }}"
-          class="px-5 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow hover:opacity-90 transform hover:-translate-y-0.5 transition">
-          Courses
+      <div class="flex items-center space-x-3 text-sm">
+        <a href="{{ url_for('ui.show_documents') }}" class="nav-link">
+          📚 Courses
         </a>
 
-        <a href="{{ url_for('ui.show_results') }}"
-          class="px-5 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-blue-600 text-white shadow hover:opacity-90 transform hover:-translate-y-0.5 transition">
-          Results
+        <a href="{{ url_for('ui.show_results') }}" class="nav-link">
+          📊 Results
         </a>
 
         {% if current_user.is_authenticated %}
-          <span class="text-gray-600">👋 {{ current_user.username }}</span>
+          <span class="user-badge">
+            <span>👋</span>
+            <span>{{ current_user.username }}</span>
+          </span>
 
-          <a href="{{ url_for('auth.logout') }}"
-            class="inline-block bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-5 py-2 rounded-lg shadow hover:opacity-90 transition transform hover:-translate-y-0.5">
+          <a href="{{ url_for('auth.logout') }}" class="primary-btn">
             Logout
           </a>
         {% else %}
-          <a href="{{ url_for('auth.login') }}"
-            class="border border-blue-500 text-blue-600 px-5 py-2 rounded-lg shadow-sm hover:bg-blue-50 transition transform hover:-translate-y-0.5">
+          <a href="{{ url_for('auth.login') }}" class="secondary-btn">
             🔑 Login
           </a>
 
-          <a href="{{ url_for('auth.register') }}"
-            class="inline-block bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-5 py-2 rounded-lg shadow hover:opacity-90 transition transform hover:-translate-y-0.5">
+          <a href="{{ url_for('auth.register') }}" class="primary-btn">
             ✍️ Register
           </a>
         {% endif %}
@@ -134,14 +409,14 @@
   </header>
 
   <!-- Main -->
-  <main class="container mx-auto flex-1 mt-24 p-6">
+  <main class="container mx-auto flex-1 mt-28 mb-12 px-6 relative z-10">
     {% with messages = get_flashed_messages(with_categories=True) %}
       {% if messages %}
-        <div class="max-w-md mx-auto mb-6">
+        <div class="max-w-2xl mx-auto mb-8">
           {% for category, message in messages %}
-            <div class="p-3 rounded mb-2 text-sm
-                        {% if category == 'error' %}bg-red-100 text-red-700
-                        {% else %}bg-green-100 text-green-700{% endif %}">
+            <div class="flash-message mb-3 font-medium
+                        {% if category == 'error' %}bg-gradient-to-r from-red-50 to-red-100 text-red-800 border-l-4 border-red-500
+                        {% else %}bg-gradient-to-r from-green-50 to-green-100 text-green-800 border-l-4 border-green-500{% endif %}">
               {{ message }}
             </div>
           {% endfor %}
@@ -152,22 +427,16 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-white border-t border-gray-200 overflow-hidden py-6 mt-auto relative">
-    <div class="whitespace-nowrap animate-footer-scroll text-gray-600 text-sm font-medium">
-      <span class="mx-6">✨ &copy; {{ app_name }} {{ current_year }} — {{ app_tagline }}</span>
+  <footer class="glass-effect border-t border-white/20 overflow-hidden py-8 mt-auto relative z-10">
+    <div class="whitespace-nowrap animate-footer-scroll text-gray-700 text-sm font-semibold">
+      <span class="mx-8">✨ &copy; {{ app_name }} {{ current_year }} — {{ app_tagline }}</span>
+      <span class="mx-8">🚀 Powered by AI</span>
+      <span class="mx-8">💡 Smart Learning</span>
+      <span class="mx-8">✨ &copy; {{ app_name }} {{ current_year }} — {{ app_tagline }}</span>
+      <span class="mx-8">🚀 Powered by AI</span>
+      <span class="mx-8">💡 Smart Learning</span>
     </div>
   </footer>
-
-  <style>
-  @keyframes footerScroll {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-  }
-  .animate-footer-scroll {
-    display: inline-block;
-    animation: footerScroll 25s linear infinite;
-  }
-  </style>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>

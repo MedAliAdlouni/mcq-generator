@@ -1,6 +1,6 @@
 // app/static/js/main.js
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("✨ qcmed front prêt !");
+  console.log("✨ QuizAI front prêt !");
 
   // --- Upload ---
   const uploadForm = document.getElementById("uploadForm");
