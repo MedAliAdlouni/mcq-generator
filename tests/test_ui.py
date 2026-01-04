@@ -57,7 +57,6 @@ class TestQuizPage:
         # Route tries to render 404.html which doesn't exist
         # This causes a TemplateNotFound exception (500 error)
         # In production, this template should exist
-        import pytest
         from jinja2.exceptions import TemplateNotFound
         # Flask test client will raise the exception rather than returning 500
         with pytest.raises(TemplateNotFound):
@@ -90,7 +89,6 @@ class TestPlayQuizPage:
         # Route tries to render 404.html which doesn't exist
         # This causes a TemplateNotFound exception (500 error)
         # In production, this template should exist
-        import pytest
         from jinja2.exceptions import TemplateNotFound
         # Flask test client will raise the exception rather than returning 500
         with pytest.raises(TemplateNotFound):

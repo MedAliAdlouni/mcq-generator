@@ -1,9 +1,6 @@
 """
 Tests for document routes
 """
-import pytest
-import os
-from pathlib import Path
 
 
 class TestUploadDocument:

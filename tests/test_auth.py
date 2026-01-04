@@ -2,7 +2,6 @@
 Tests for authentication routes (register, login, logout)
 """
 import pytest
-from flask import url_for
 
 
 class TestRegister:
@@ -128,7 +127,6 @@ class TestLogin:
         which causes an AttributeError. This is a bug in the route code that should be fixed.
         For now, we skip this test or expect the exception.
         """
-        import pytest
         # Route throws AttributeError when password is None
         # In production, this should be handled with proper validation
         with pytest.raises(AttributeError):

@@ -1,7 +1,6 @@
 """
 Tests for quiz routes
 """
-import pytest
 
 
 class TestGenerateQuiz:

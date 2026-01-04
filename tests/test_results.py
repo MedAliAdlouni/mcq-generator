@@ -1,8 +1,6 @@
 """
 Tests for results routes
 """
-import pytest
-from datetime import datetime
 
 
 class TestSaveResults:
