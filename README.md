@@ -32,33 +32,38 @@ MCQ Generator extracts meaningful content from PDF and DOCX documents and automa
 
 - Python 3.9+
 - PostgreSQL 12+
-- pip and virtualenv
+- uv
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/MedAliAdlouni/mcq-generator
    cd mcq-generator
    ```
 
 2. **Set up virtual environment**
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # Windows: .venv\Scripts\activate
+   uv venv
+   source .venv/bin/activate 
    ```
 
 3. **Install dependencies**
    ```bash
-   pip install -r requirements.txt
+   uv sync
    ```
 
 4. **Configure environment variables**
    ```bash
-   export FLASK_ENV=development
-   export DATABASE_URL=postgresql://user:pass@localhost:5432/mcq_db
-   export SECRET_KEY="your-secret-key-here"
-   # Add any LLM API keys if needed
+   GEMINI_API_KEY=...
+   FLASK_ENV=production
+   SECRET_KEY=...
+   DATABASE_URL=postgresql://mcq_user:POSTGRES_PASSWORD@localhost:5432/mcq_generator
+   POSTGRES_USER=mcq_user
+   POSTGRES_PASSWORD=meladlouni2001
+   POSTGRES_DB=mcq_generator
+   FLASK_PORT=5000
+   POSTGRES_PORT=5432
    ```
 
 5. **Initialize database**
@@ -68,41 +73,10 @@ MCQ Generator extracts meaningful content from PDF and DOCX documents and automa
 
 6. **Run the application**
    ```bash
-   python run.py
-   # or with gunicorn
-   gunicorn wsgi:app
+   uv run wsgi.py
    ```
 
 Visit `http://localhost:5000` to access the application.
-
-## Project Structure
-
-```
-mcq-generator/
-├── app/                      # Main application package
-│   ├── __init__.py          # App factory and config
-│   ├── backend.py           # Backend entry points
-│   ├── db.py                # Database configuration
-│   ├── models.py            # SQLAlchemy ORM models
-│   ├── core/                # Business logic
-│   │   ├── extraction.py    # Document parsing and chunking
-│   │   └── llm.py          # LLM integration and MCQ generation
-│   ├── routes/              # Flask blueprints
-│   │   ├── auth.py         # Authentication routes
-│   │   ├── documents.py    # Document management
-│   │   ├── quizzes.py      # Quiz generation and play
-│   │   ├── results.py      # Results and scoring
-│   │   └── ui.py           # UI-specific routes
-│   ├── templates/           # Jinja2 HTML templates
-│   └── static/             # CSS, JS, images
-├── tests/                   # Test suite
-├── files/                   # Example documents
-├── uploads/                 # User-uploaded files (runtime)
-├── Dockerfile              # Container configuration
-├── docker-compose.yml      # Multi-container orchestration
-├── requirements.txt        # Python dependencies
-└── run.py                  # Application entry point
-```
 
 ## How It Works
 
@@ -137,87 +111,11 @@ Users can review their quiz performance:
 - Track progress over time
 - Compare results across multiple attempts
 
-## Docker Deployment
-
-### Build and Run Locally
-
-```bash
-# Build the image
-docker build -t mcq-generator .
-
-# Run with environment variables
-docker run -e DATABASE_URL="$DATABASE_URL" \
-           -e SECRET_KEY="$SECRET_KEY" \
-           -p 8000:8000 \
-           mcq-generator
-```
-
-### Using Docker Compose
-
-```bash
-# Start all services (app + PostgreSQL)
-docker-compose up -d
-
-# Stop services
-docker-compose down
-```
-
-The `docker-compose.yml` file includes both the Flask app and PostgreSQL database with automatic networking.
-
-## Deployment on Railway
-
-This application is deployed on [Railway](https://railway.app/) with managed PostgreSQL.
-
-### Deploy Your Own
-
-1. Fork this repository
-2. Create a new project on Railway
-3. Connect your GitHub repository
-4. Add a PostgreSQL plugin
-5. Set environment variables:
-   - `SECRET_KEY`
-   - `DATABASE_URL` (auto-provided by Railway)
-   - Any required LLM API keys
-6. Configure build command: `pip install -r requirements.txt`
-7. Configure start command: `gunicorn wsgi:app`
-
-## Configuration
-
-### Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
-| `SECRET_KEY` | Flask session secret | Yes |
-| `FLASK_ENV` | Environment mode (development/production) | No |
-| `LLM_API_KEY` | API key for LLM provider | Conditional |
-
 ### Customization
 
 - **Question prompts:** Modify templates in `app/core/llm.py`
 - **Chunking strategy:** Adjust parameters in `app/core/extraction.py`
 - **Styling:** Edit Tailwind classes in templates or customize `static/css/`
-
-## Testing
-
-Run the test suite with pytest:
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=app
-
-# Run specific test file
-pytest tests/test_extraction.py
-```
-
-Tests cover:
-- Document extraction and parsing
-- LLM integration and question generation
-- Database models and queries
-- Route handlers and views
 
 ## Troubleshooting
 
@@ -238,44 +136,8 @@ Tests cover:
 - Check file size limits in Flask config
 - Verify supported file formats (PDF, DOCX)
 
-## Contributing
 
-Contributions are welcome! Here are areas where you can help:
 
-- **Extraction improvements:** Better heuristics for document parsing
-- **Question validation:** Enhanced quality control for generated MCQs
-- **UI/UX enhancements:** Frontend improvements and interactivity
-- **Test coverage:** Additional test cases and edge case handling
-- **Documentation:** API docs, guides, and examples
-
-### Development Workflow
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes and add tests
-4. Run the test suite (`pytest`)
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
-## Roadmap
-
-- [ ] Support for additional document formats (TXT, MD, HTML)
-- [ ] Tailwind build pipeline with PostCSS
-- [ ] GitHub Actions CI/CD
-- [ ] Export quizzes to various formats
-- [ ] Multi-language support
-- [ ] Advanced analytics dashboard
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgements
-
-Built as a demonstration of document processing, LLM integration, and modern web application architecture.
-
----
 
 **Live Demo:** [https://mcq-generator-production-a0dc.up.railway.app/](https://mcq-generator-production-a0dc.up.railway.app/)
 
