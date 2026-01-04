@@ -1,6 +1,6 @@
 // app/static/js/main.js
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("✨ QuizAI front prêt !");
+  console.log("✨ QuizAI frontend ready!");
 
   // --- Upload ---
   const uploadForm = document.getElementById("uploadForm");
@@ -9,20 +9,20 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const formData = new FormData(uploadForm);
       const status = document.getElementById("uploadStatus");
-      status.textContent = "📤 Envoi en cours...";
+      status.textContent = "📤 Uploading...";
 
       try {
         const res = await fetch("/api/documents/upload", { method: "POST", body: formData });
         const data = await res.json();
 
         if (res.ok) {
-          status.textContent = "✅ Document importé avec succès !";
+          status.textContent = "✅ Document uploaded successfully!";
           setTimeout(() => (window.location.href = "/documents"), 1000);
         } else {
-          status.textContent = "❌ " + (data.error || "Erreur d'importation.");
+          status.textContent = "❌ " + (data.error || "Upload error.");
         }
       } catch (err) {
-        status.textContent = "⚠️ Erreur réseau.";
+        status.textContent = "⚠️ Network error.";
       }
     });
   }
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   deleteButtons.forEach((btn) => {
     btn.addEventListener("click", async () => {
       const id = btn.dataset.delete;
-      if (!confirm("Supprimer ce document ?")) return;
+      if (!confirm("Delete this document?")) return;
 
       try {
         const res = await fetch(`/api/documents/${id}`, { method: "DELETE" });
@@ -40,36 +40,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (res.ok) {
           btn.closest("div.bg-white, div.bg-white\\/50, div.bg-white\\/40")?.remove();
-          alert("🗑️ Document supprimé !");
+          alert("🗑️ Document deleted!");
         } else {
-          alert("❌ Erreur : " + (data.error || "Impossible de supprimer."));
+          alert("❌ Error: " + (data.error || "Unable to delete."));
         }
       } catch (err) {
-        alert("⚠️ Erreur réseau ou serveur.");
+        alert("⚠️ Network or server error.");
       }
     });
   });
 
-  // --- Génération de quiz ---
+  // --- Quiz generation ---
   const genButtons = document.querySelectorAll("[data-generate]");
   genButtons.forEach((btn) => {
     btn.addEventListener("click", async () => {
       const docId = btn.dataset.generate;
       btn.disabled = true;
       const oldText = btn.textContent;
-      btn.textContent = "⏳ Génération...";
+      btn.textContent = "⏳ Generating...";
 
       try {
         const res = await fetch(`/api/quizzes/generate?document_id=${docId}`, { method: "POST" });
         const data = await res.json();
 
         if (res.ok) {
-          alert(data.message || "✅ Quiz généré !");
+          alert(data.message || "✅ Quiz generated!");
         } else {
-          alert("❌ " + (data.error || "Erreur pendant la génération."));
+          alert("❌ " + (data.error || "Error during generation."));
         }
       } catch (err) {
-        alert("⚠️ Erreur de connexion au serveur.");
+        alert("⚠️ Server connection error.");
       }
 
       btn.textContent = oldText;
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // --- Mode Quiz strict : une question à la fois ---
+  // --- Strict Quiz Mode: one question at a time ---
   const quizContainer = document.getElementById("quizContainer");
   if (quizContainer) {
     const questions = JSON.parse(quizContainer.dataset.questions);
@@ -109,12 +109,12 @@ document.addEventListener("DOMContentLoaded", () => {
             </button>`
                 )
                 .join("")
-            : `<textarea id="openAnswer" rows="2" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary" placeholder="Ta réponse..."></textarea>
-              <button id="submitOpen" class="mt-3 bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">Valider</button>`
+            : `<textarea id="openAnswer" rows="2" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary" placeholder="Your answer..."></textarea>
+              <button id="submitOpen" class="mt-3 bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">Submit</button>`
         }
       `;
 
-      if (q.type === "ouverte") {
+      if (q.type === "open") {
         document.getElementById("submitOpen").addEventListener("click", () => {
           const answer = document.getElementById("openAnswer").value.trim();
           handleAnswer(answer);
@@ -137,12 +137,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (q.is_correct) {
         score++;
-        scoreDisplay.textContent = `Score : ${score}`;
+        scoreDisplay.textContent = `Score: ${score}`;
         if (btn) btn.classList.add("bg-green-100", "border-green-500");
-        showFeedback("✅ Bonne réponse !");
+        showFeedback("✅ Correct answer!");
       } else {
         if (btn) btn.classList.add("bg-red-100", "border-red-500");
-        showFeedback(`❌ Mauvaise réponse. Réponse correcte : <strong>${q.answer}</strong>`);
+        showFeedback(`❌ Wrong answer. Correct answer: <strong>${q.answer}</strong>`);
       }
 
       nextBtn.classList.remove("hidden");
@@ -166,8 +166,8 @@ document.addEventListener("DOMContentLoaded", () => {
       nextBtn.classList.add("hidden");
       resultBox.classList.remove("hidden");
       resultBox.innerHTML = `
-        <h2 class="text-2xl font-bold mb-2">Quiz terminé</h2>
-        <p class="text-lg">Score final : <strong>${score}/${questions.length}</strong></p>
+        <h2 class="text-2xl font-bold mb-2">Quiz Completed</h2>
+        <p class="text-lg">Final score: <strong>${score}/${questions.length}</strong></p>
       `;
 
       const answersData = questions.map((q) => ({
@@ -187,9 +187,9 @@ document.addEventListener("DOMContentLoaded", () => {
           }),
         });
         const data = await res.json();
-        console.log("💾 Sauvegarde :", data);
+        console.log("💾 Saved:", data);
       } catch (err) {
-        console.error("❌ Erreur lors de la sauvegarde :", err);
+        console.error("❌ Error saving results:", err);
       }
     }
 
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderQuestion();
   }
 
-  // --- Visualisation des résultats (page /results) ---
+  // --- Results visualization (/results page) ---
   const docSelect = document.getElementById("documentSelect");
   const ctx = document.getElementById("resultsChart");
   const noDataMsg = document.getElementById("noDataMessage");
@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (chart) chart.destroy();
 
-      // Gradient pastel pour la courbe
+      // Pastel gradient for the line
       const ctx2d = ctx.getContext("2d");
       const gradient = ctx2d.createLinearGradient(0, 0, 0, 300);
       gradient.addColorStop(0, "rgba(37,99,235,0.4)");
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
           labels: labels,
           datasets: [
             {
-              label: "Note",
+              label: "Score",
               data: data.map(d => d.score),
               borderColor: "#2563eb",
               backgroundColor: "rgba(37,99,235,0.15)",
@@ -296,10 +296,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // Initialisation
+    // Initial load
     if (docSelect.value) updateChart(docSelect.value);
 
-    // Mise à jour dynamique
+    // Dynamic update
     docSelect.addEventListener("change", (e) => {
       updateChart(e.target.value);
     });
