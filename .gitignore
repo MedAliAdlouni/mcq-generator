@@ -21,3 +21,11 @@ uploads/
 data.db
 
 docker-compose.yml
+
+TEST_COVERAGE_ANALYSIS.md
+
+todolist.md
+
+.devcontainer/
+
+*.egg-info/
