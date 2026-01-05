@@ -2,6 +2,32 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✨ QuizAI frontend ready!");
 
+  // --- Toast notification function ---
+  function showToast(message, type = "success") {
+    const container = document.getElementById("toastContainer");
+    if (!container) return;
+
+    const toast = document.createElement("div");
+    const bgColor = type === "success" 
+      ? "bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border-green-500"
+      : "bg-gradient-to-r from-red-50 to-rose-50 text-red-800 border-red-500";
+    
+    toast.className = `${bgColor} border-l-4 rounded-lg shadow-lg px-6 py-4 min-w-[300px] max-w-md animate-slide-in-right flex items-center gap-3`;
+    toast.innerHTML = `
+      <span class="text-2xl">${type === "success" ? "✅" : "❌"}</span>
+      <span class="flex-1 font-medium">${message}</span>
+      <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600 transition">✕</button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+      toast.style.animation = "slide-out-right 0.3s ease forwards";
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
+  }
+
   // --- Upload ---
   const uploadForm = document.getElementById("uploadForm");
   if (uploadForm) {
@@ -64,16 +90,40 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
 
         if (res.ok) {
-          alert(data.message || "✅ Quiz generated!");
+          showToast(data.message || "Quiz generated successfully!", "success");
+          
+          // Update the DOM: swap buttons without page refresh
+          const playDisabledBtn = document.querySelector(`[data-play-disabled="${docId}"]`);
+          const generateBtn = document.querySelector(`[data-generate-btn="${docId}"]`);
+          
+          if (playDisabledBtn && generateBtn) {
+            // Create new Play link
+            const playLink = document.createElement("a");
+            playLink.href = `/quizzes/play/${docId}`;
+            playLink.className = "btn btn-green hover:brightness-105";
+            playLink.textContent = "Play";
+            
+            // Create new Generated button
+            const generatedBtn = document.createElement("button");
+            generatedBtn.disabled = true;
+            generatedBtn.className = "btn btn-yellow opacity-60 cursor-not-allowed";
+            generatedBtn.title = "Quiz already generated";
+            generatedBtn.textContent = "Generated";
+            
+            // Replace buttons
+            playDisabledBtn.replaceWith(playLink);
+            generateBtn.replaceWith(generatedBtn);
+          }
         } else {
-          alert("❌ " + (data.error || "Error during generation."));
+          showToast(data.error || "Error during generation.", "error");
+          btn.textContent = oldText;
+          btn.disabled = false;
         }
       } catch (err) {
-        alert("⚠️ Server connection error.");
+        showToast("Server connection error.", "error");
+        btn.textContent = oldText;
+        btn.disabled = false;
       }
-
-      btn.textContent = oldText;
-      btn.disabled = false;
     });
   });
 
